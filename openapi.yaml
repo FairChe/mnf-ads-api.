@@ -1,0 +1,72 @@
+openapi: 3.1.0
+info:
+  title: MNF Ads API
+  description: API for querying Monday Night Football advertisements.
+  version: 1.0.0
+servers:
+  - url: https://mnf-ads-api.onrender.com
+paths:
+  /ads:
+    get:
+      operationId: getAds
+      summary: Get ads filtered by query
+      description: |
+        Returns a list of ads. You can filter by game, advertiser, category, or network.
+      parameters:
+        - name: game
+          in: query
+          description: Filter ads by the game name
+          schema:
+            type: string
+        - name: advertiser
+          in: query
+          description: Filter ads by advertiser
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filter ads by ad category
+          schema:
+            type: string
+        - name: network
+          in: query
+          description: Filter ads by network
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of ads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /ads/stats:
+    get:
+      operationId: getAdStats
+      summary: Get aggregated ad statistics
+      description: |
+        Returns ad counts grouped by advertiser, category, or game.
+      parameters:
+        - name: groupBy
+          in: query
+          required: true
+          description: Group results by advertiser, category, or game
+          schema:
+            type: string
+            enum: [advertiser, category, game]
+      responses:
+        '200':
+          description: Aggregated stats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    count:
+                      type: integer
